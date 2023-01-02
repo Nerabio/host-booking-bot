@@ -16,6 +16,7 @@ import { Update as UT } from "telegraf/typings/core/types/typegram";
 import { UpdateType } from "../../common/decorators/update-type.decorator";
 import { Markup } from "telegraf";
 import { ReverseTextPipe } from "../../common/pipes/reverse-text.pipe";
+import { Cron, CronExpression } from "@nestjs/schedule";
 
 export function getMainMenu() {
   return Markup.keyboard([
@@ -36,8 +37,10 @@ export function yesNoKeyboard() {
 
 @Update()
 export class DealerUpdate {
+  private gCtx: Context;
   @Start()
-  onStart(): string {
+  onStart(@Ctx() ctx: Context): string {
+    this.gCtx = ctx;
     return "Say hello to me";
   }
 
@@ -105,6 +108,14 @@ export class DealerUpdate {
       context.scene.enter(HELLO_SCENE_ID);
     } else {
       context.reply("подумай еще ❌");
+    }
+  }
+
+  //@Cron("45 * * * * *")
+  @Cron(CronExpression.EVERY_30_SECONDS)
+  time() {
+    if (this.gCtx) {
+      this.gCtx.reply("подумай еще ❌");
     }
   }
 

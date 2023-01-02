@@ -8,6 +8,7 @@ import { EchoModule } from "./modules/echo/echo.module";
 import { GreeterBotName } from "./app.constants";
 import { DealerModule } from "./modules/dealer/dealer.module";
 import { sessionMiddleware } from "./middleware/session.middleware";
+import { ScheduleModule } from "@nestjs/schedule";
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { sessionMiddleware } from "./middleware/session.middleware";
     }),
     EchoModule,
     DealerModule,
+    ScheduleModule.forRoot(),
   ],
   controllers: [AppController],
   providers: [AppService, Logger],
