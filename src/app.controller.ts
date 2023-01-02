@@ -14,6 +14,8 @@ export class AppController {
   getHello(): string {
     this.logger.debug("start method getHello");
     console.log(this.configService.get<string>("jwt.secret"));
+    console.log(this.configService.get<string>("tokenBot"));
+    console.log(process.env.TOKEN_BOT);
 
     return this.appService.getHello();
   }
