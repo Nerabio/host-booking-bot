@@ -7,8 +7,9 @@ import { TelegrafModule } from "nestjs-telegraf";
 import { EchoModule } from "./modules/echo/echo.module";
 import { GreeterBotName } from "./app.constants";
 import { DealerModule } from "./modules/dealer/dealer.module";
-import { sessionMiddleware } from "./middleware/session.middleware";
+import { localSessionMiddleware } from "./middleware/session.middleware";
 import { ScheduleModule } from "@nestjs/schedule";
+import { HostService } from "./common/services/host.service";
 
 @Module({
   imports: [
@@ -21,7 +22,7 @@ import { ScheduleModule } from "@nestjs/schedule";
       botName: GreeterBotName,
       useFactory: () => ({
         token: `${process.env.TOKEN_BOT}`,
-        middlewares: [sessionMiddleware],
+        middlewares: [localSessionMiddleware],
         include: [DealerModule],
       }),
     }),
@@ -30,6 +31,6 @@ import { ScheduleModule } from "@nestjs/schedule";
     ScheduleModule.forRoot(),
   ],
   controllers: [AppController],
-  providers: [AppService, Logger],
+  providers: [AppService, Logger, HostService],
 })
 export class AppModule {}

@@ -1,3 +1,5 @@
-import { session } from "telegraf";
+const LocalSession = require("telegraf-session-local");
 
-export const sessionMiddleware = session();
+export const localSessionMiddleware = new LocalSession({
+  database: "example_db.json",
+}).middleware();

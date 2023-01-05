@@ -1,4 +1,12 @@
 import { Scenes } from "telegraf";
+import { Update as UT } from "telegraf/typings/core/types/typegram";
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface Context extends Scenes.SceneContext {}
+interface SessionData {
+  count: number;
+}
+
+export type Context = Scenes.SceneContext & {
+  update: UT.CallbackQueryUpdate;
+} & {
+  session: SessionData;
+};
