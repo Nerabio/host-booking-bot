@@ -33,7 +33,7 @@ export function eventMenuHost() {
 
 export function getSimpleMenu(buttons: HostModel[]) {
   return Markup.keyboard(
-    buttons.map((b) => `${b.name} -> [${b.status === "free" ? "✅" : "❌"}]`)
+    buttons.map((b) => `${b.name} -> [${b.isBusy ? "❌" : "✅"}]`)
   ).resize();
 }
 
@@ -56,11 +56,11 @@ export class InfoScene {
     await ctx.replyWithHTML("Я могу помочь с управлением", hostsKeyboard());
   }
 
-  @SceneLeave()
-  onSceneLeave(): string {
-    console.log("Leave from scene");
-    return "Bye Bye 👋 Вы покидаете ИНФО";
-  }
+  // @SceneLeave()
+  // onSceneLeave(): string {
+  //   console.log("Leave from scene");
+  //   return "Bye Bye 👋 Вы покидаете ИНФО";
+  // }
 
   @Action(["allHost"])
   async onAllHost(ctx: Context) {

@@ -1,21 +1,7 @@
-import {
-  Command,
-  Ctx,
-  Hears,
-  Start,
-  Update,
-  Sender,
-  Action,
-  Message,
-  On,
-} from "nestjs-telegraf";
-import { UpdateType as TelegrafUpdateType } from "telegraf/typings/telegram-types";
-import { HELLO_SCENE_ID, NODE_SCENE_ID } from "../../app.constants";
+import { Command, Ctx, Start, Update, Action } from "nestjs-telegraf";
 import { Context } from "../../interfaces/context.interface";
 import { Update as UT } from "telegraf/typings/core/types/typegram";
-import { UpdateType } from "../../common/decorators/update-type.decorator";
 import { Markup } from "telegraf";
-import { ReverseTextPipe } from "../../common/pipes/reverse-text.pipe";
 import { Cron, CronExpression } from "@nestjs/schedule";
 import { HostService } from "../../common/services/host.service";
 import { HostModel } from "../../common/models/host.model";
