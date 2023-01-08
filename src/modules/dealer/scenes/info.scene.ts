@@ -1,9 +1,11 @@
 import { Action, Ctx, Scene, SceneEnter, SceneLeave } from "nestjs-telegraf";
 import { Context } from "../../../interfaces/context.interface";
 import { Markup } from "telegraf";
-import { HostService } from "../../../common/services/host.service";
-import { HostModel } from "../../../common/models/host.model";
-import { SceneEnum } from "../../../common/enums/scene.enum";
+import { HostService } from "@common/services/host.service";
+import { HostModel } from "@common/models/host.model";
+import { SceneEnum } from "@common/enums/scene.enum";
+import { UsersService } from "@common/services/users.service";
+import { Host } from "@common/entity/host.entity";
 
 export enum ActionPrefix {
   HOST = "select_host->",
@@ -37,11 +39,11 @@ export function getSimpleMenu(buttons: HostModel[]) {
   ).resize();
 }
 
-export function getHostMenu(buttons: HostModel[]) {
+export function getHostMenu(buttons: Host[]) {
   return Markup.inlineKeyboard(
     buttons.map((h) => ({
-      text: h.name,
-      callback_data: ActionPrefix.HOST + h.name,
+      text: h.title,
+      callback_data: ActionPrefix.HOST + h.title,
     })),
     { columns: 2 }
   );
@@ -49,23 +51,20 @@ export function getHostMenu(buttons: HostModel[]) {
 
 @Scene(SceneEnum.INFO_SCENE)
 export class InfoScene {
-  constructor(private hostService: HostService) {}
+  constructor(
+    private hostService: HostService,
+    private usersService: UsersService
+  ) {}
 
   @SceneEnter()
   async onSceneEnter(@Ctx() ctx: Context) {
     await ctx.replyWithHTML("Я могу помочь с управлением", hostsKeyboard());
   }
 
-  // @SceneLeave()
-  // onSceneLeave(): string {
-  //   console.log("Leave from scene");
-  //   return "Bye Bye 👋 Вы покидаете ИНФО";
-  // }
-
   @Action(["allHost"])
   async onAllHost(ctx: Context) {
     await ctx.deleteMessage();
-    const allHost = this.hostService.getAllHost();
+    const allHost = await this.hostService.findAll();
     await ctx.replyWithHTML("<b>Вот все мои хосты</b>", getHostMenu(allHost));
   }
 
@@ -81,6 +80,8 @@ export class InfoScene {
 
     await ctx.deleteMessage();
 
+    const allUser = await this.usersService.findAll();
+    console.log(allUser);
     const hostName = userAnswer.replace(ActionPrefix.HOST, "");
     await ctx.replyWithHTML(`<b>${hostName}</b>`, eventMenuHost());
   }

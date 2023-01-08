@@ -3,9 +3,8 @@ import { Context } from "../../interfaces/context.interface";
 import { Update as UT } from "telegraf/typings/core/types/typegram";
 import { Markup } from "telegraf";
 import { Cron, CronExpression } from "@nestjs/schedule";
-import { HostService } from "../../common/services/host.service";
-import { HostModel } from "../../common/models/host.model";
-import { SceneEnum } from "../../common/enums/scene.enum";
+import { HostModel } from "@common/models/host.model";
+import { SceneEnum } from "@common/enums/scene.enum";
 
 export function getMainMenu() {
   return Markup.keyboard([
@@ -42,11 +41,19 @@ export function mainNavigation() {
 export class DealerUpdate {
   private gCtx: Context;
 
-  constructor(private hostService: HostService) {}
+  constructor() {}
   @Start()
   onStart(@Ctx() ctx: Context) {
     ctx.replyWithHTML(
       "Приветсвую! Я твой <b>Хост Диллер</b>\n\n" +
+        ctx.from.first_name +
+        "\n\n" +
+        ctx.from.last_name +
+        "\n\n" +
+        ctx.from.username +
+        "\n\n" +
+        ctx.from.id +
+        "\n\n" +
         "Вот что у меня для тебя есть",
       mainNavigation()
     );
@@ -63,7 +70,7 @@ export class DealerUpdate {
         await ctx.scene.enter(SceneEnum.INFO_SCENE);
         break;
       case "admin":
-        await ctx.scene.enter(SceneEnum.INFO_SCENE);
+        await ctx.scene.enter(SceneEnum.ADMIN);
         break;
     }
   }

@@ -9,7 +9,8 @@ import { GreeterBotName } from "./app.constants";
 import { DealerModule } from "./modules/dealer/dealer.module";
 import { localSessionMiddleware } from "./middleware/session.middleware";
 import { ScheduleModule } from "@nestjs/schedule";
-import { HostService } from "./common/services/host.service";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { DataSource } from "typeorm";
 
 @Module({
   imports: [
@@ -17,6 +18,22 @@ import { HostService } from "./common/services/host.service";
       envFilePath: `${__dirname}/config/environments/${process.env.NODE_ENV}.env`,
       load: [configuration],
       cache: true,
+    }),
+    //TypeOrmModule.forRoot(typeOrmConfig),
+    TypeOrmModule.forRoot({
+      type: "postgres",
+      host: "localhost",
+      port: 5432,
+      username: "habrpguser",
+      password: "pgpwd4habr",
+      database: "postgres",
+      synchronize: true,
+      autoLoadEntities: true,
+      entities: [
+        "/src/common/entity/**/*.entity.ts",
+        "/dist/common/entity/**/*.entity.ts",
+      ],
+      migrations: ["/src/migrations/**/*.ts", "/dist/migrations/**/*.js"],
     }),
     TelegrafModule.forRootAsync({
       botName: GreeterBotName,
@@ -31,6 +48,8 @@ import { HostService } from "./common/services/host.service";
     ScheduleModule.forRoot(),
   ],
   controllers: [AppController],
-  providers: [AppService, Logger, HostService],
+  providers: [AppService, Logger],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(private dataSource: DataSource) {}
+}
