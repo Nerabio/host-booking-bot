@@ -18,11 +18,15 @@ export class UsersService {
     return this.usersRepository.findOneBy({ id });
   }
 
+  findOneByTelegramId(telegramId: number): Promise<User> {
+    return this.usersRepository.findOneBy({ telegramId });
+  }
+
   async remove(id: string): Promise<void> {
     await this.usersRepository.delete(id);
   }
 
-  async create(user: User): Promise<void> {
+  async save(user: User): Promise<void> {
     await this.usersRepository.save(user);
   }
 }

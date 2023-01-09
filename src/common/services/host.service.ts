@@ -12,29 +12,30 @@ export class HostService {
   ) {}
 
   findAll(): Promise<Host[]> {
-    return this.hostsRepository.find();
+    return this.hostsRepository.find({
+      relations: {
+        user: true,
+      },
+    });
   }
 
   findOne(id: number): Promise<Host> {
     return this.hostsRepository.findOneBy({ id });
   }
 
-  async create(host: Host): Promise<void> {
+  findByName(title: string): Promise<Host> {
+    return this.hostsRepository.findOneBy({ title });
+  }
+
+  async save(host: Host): Promise<void> {
     await this.hostsRepository.save(host);
+  }
+
+  async insert(host: Host): Promise<void> {
+    await this.hostsRepository.insert(host);
   }
 
   async remove(id: string): Promise<void> {
     await this.hostsRepository.delete(id);
-  }
-  public getAllHost(): HostModel[] {
-    return [
-      { name: "dev.kion.ru", isBusy: true },
-      { name: "prod.kion.ru", isBusy: false },
-      { name: "s1.dev.kion.ru", isBusy: true },
-      { name: "s2.dev.kion.ru", isBusy: true },
-      { name: "s3.dev.kion.ru", isBusy: true },
-      { name: "test.kion.ru", isBusy: true },
-      { name: "hisense.kion.ru", isBusy: true },
-    ];
   }
 }

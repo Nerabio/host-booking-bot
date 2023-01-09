@@ -5,6 +5,8 @@ import { Markup } from "telegraf";
 import { Cron, CronExpression } from "@nestjs/schedule";
 import { HostModel } from "@common/models/host.model";
 import { SceneEnum } from "@common/enums/scene.enum";
+import { UsersService } from "@common/services/users.service";
+import { User } from "@common/entity/user.entity";
 
 export function getMainMenu() {
   return Markup.keyboard([
@@ -41,9 +43,19 @@ export function mainNavigation() {
 export class DealerUpdate {
   private gCtx: Context;
 
-  constructor() {}
+  constructor(private usersService: UsersService) {}
   @Start()
-  onStart(@Ctx() ctx: Context) {
+  async onStart(@Ctx() ctx: Context) {
+    let user = await this.usersService.findOneByTelegramId(ctx.from.id);
+    if (!user) {
+      user = new User();
+      user.telegramId = ctx.from.id;
+      user.firstName = ctx.from.first_name;
+      user.lastName = ctx.from.last_name;
+      user.telegramName = ctx.from.username;
+      await this.usersService.save(user);
+    }
+    ctx.session.currentUser = user;
     ctx.replyWithHTML(
       "Приветсвую! Я твой <b>Хост Диллер</b>\n\n" +
         ctx.from.first_name +

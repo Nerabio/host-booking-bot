@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  JoinTable,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -21,9 +22,24 @@ export class Host {
   @UpdateDateColumn({ type: "timestamptz", default: () => "CURRENT_TIMESTAMP" })
   lastChangedDateTime: Date;
 
-  @ManyToOne(() => User, (user) => user.hosts)
+  @Column({ nullable: true })
+  busyDateTime: Date;
+
+  @ManyToOne(() => User, (user) => user.hosts, {
+    eager: true,
+  })
+  @JoinTable()
   user: User;
 
   @Column({ nullable: true })
   userId: number;
+
+  public dismiss(): void {
+    this.user = null;
+    this.busyDateTime = null;
+  }
+  public take(user: User): void {
+    this.user = user;
+    this.busyDateTime = new Date();
+  }
 }

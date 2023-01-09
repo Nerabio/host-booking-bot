@@ -7,7 +7,24 @@
           "current": "INFO_SCENE_ID",
           "state": {}
         },
-        "count": 123
+        "count": 123,
+        "currentUser": {
+          "id": 1,
+          "firstName": "Alexandr",
+          "lastName": "D",
+          "telegramName": "Nerey",
+          "telegramId": 390674782,
+          "isActive": true
+        },
+        "currentHost": {
+          "id": 7,
+          "title": "hisense.kion.ru",
+          "isActive": true,
+          "lastChangedDateTime": "2023-01-09T04:48:20.920Z",
+          "busyDateTime": null,
+          "userId": null,
+          "user": null
+        }
       }
     }
   ]
