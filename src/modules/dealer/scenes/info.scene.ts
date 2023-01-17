@@ -1,12 +1,14 @@
-import { Action, Ctx, Scene, SceneEnter, SceneLeave } from "nestjs-telegraf";
+import { Action, Ctx, Scene, SceneEnter } from "nestjs-telegraf";
 import { Context } from "../../../interfaces/context.interface";
 import { Markup } from "telegraf";
 import { HostService } from "@common/services/host.service";
 import { SceneEnum } from "@common/enums/scene.enum";
-import { UsersService } from "@common/services/users.service";
 import { Host } from "@common/entity/host.entity";
 import { User } from "@common/entity/user.entity";
 import { format } from "date-fns";
+import { UseGuards } from "@nestjs/common";
+import { SessionGuard } from "@common/guards/session.guard";
+import { AdminGuard } from "@common/guards/admin.guard";
 
 export enum ActionPrefix {
   HOST = "select_host->",
@@ -72,10 +74,7 @@ export function getHostMenu(hosts: Host[]) {
 
 @Scene(SceneEnum.INFO_SCENE)
 export class InfoScene {
-  constructor(
-    private hostService: HostService,
-    private usersService: UsersService
-  ) {}
+  constructor(private hostService: HostService) {}
 
   @SceneEnter()
   async onSceneEnter(@Ctx() ctx: Context) {
@@ -86,6 +85,7 @@ export class InfoScene {
   async onAllHost(ctx: Context) {
     await this.deleteMessage(ctx);
     const allHost = await this.hostService.findAll();
+    //await ctx.
     await ctx.replyWithHTML("<b>Вот все мои хосты</b>", getHostMenu(allHost));
   }
 
@@ -128,6 +128,8 @@ export class InfoScene {
     return host?.user?.telegramId === telegramId;
   }
 
+  @UseGuards(SessionGuard)
+  @UseGuards(AdminGuard)
   @Action(ActionHost.HOLD)
   async holdHost(@Ctx() ctx: Context) {
     const currentHost: Host = ctx.session.currentHost;

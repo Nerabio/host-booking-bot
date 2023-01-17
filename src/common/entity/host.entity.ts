@@ -3,10 +3,12 @@ import {
   Entity,
   JoinTable,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 import { User } from "@common/entity/user.entity";
+import { Notification } from "@common/entity/notification.entity";
 
 @Entity()
 export class Host {
@@ -33,6 +35,11 @@ export class Host {
 
   @Column({ nullable: true })
   userId: number;
+
+  @OneToMany(() => Notification, (notification) => notification.host, {
+    eager: true,
+  })
+  notifications: Notification[];
 
   public dismiss(): void {
     this.user = null;
