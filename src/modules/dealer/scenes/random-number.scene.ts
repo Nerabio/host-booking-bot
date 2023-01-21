@@ -1,6 +1,6 @@
 import { Scene, SceneEnter, SceneLeave, Command } from "nestjs-telegraf";
 import { Context } from "../../../interfaces/context.interface";
-import { SceneEnum } from "../../../common/enums/scene.enum";
+import { SceneEnum } from "@common/enums/scene.enum";
 
 @Scene(SceneEnum.HELLO_SCENE)
 export class RandomNumberScene {

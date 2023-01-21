@@ -31,9 +31,6 @@ export class Host {
   @JoinTable()
   user: User;
 
-  @Column({ nullable: true })
-  userId: number;
-
   public dismiss(): void {
     this.user = null;
     this.busyDateTime = null;

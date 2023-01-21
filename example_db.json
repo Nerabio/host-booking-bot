@@ -17,13 +17,19 @@
           "isActive": true
         },
         "currentHost": {
-          "id": 7,
-          "title": "hisense.kion.ru",
+          "id": 1,
+          "title": "dev.kion.ru",
           "isActive": true,
-          "lastChangedDateTime": "2023-01-09T04:48:20.920Z",
-          "busyDateTime": null,
-          "userId": null,
-          "user": null
+          "lastChangedDateTime": "2023-01-21T12:09:31.260Z",
+          "busyDateTime": "2023-01-21T12:09:31.256Z",
+          "user": {
+            "id": 1,
+            "firstName": "Alexandr",
+            "lastName": "D",
+            "telegramName": "Nerey",
+            "telegramId": 390674782,
+            "isActive": true
+          }
         }
       }
     }

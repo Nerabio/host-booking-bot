@@ -1,9 +1,8 @@
-import { Action, Ctx, Scene, SceneEnter, SceneLeave } from "nestjs-telegraf";
+import { Action, Ctx, Scene, SceneEnter } from "nestjs-telegraf";
 import { Context } from "../../../interfaces/context.interface";
 import { Markup } from "telegraf";
 import { HostService } from "@common/services/host.service";
 import { SceneEnum } from "@common/enums/scene.enum";
-import { UsersService } from "@common/services/users.service";
 import { Host } from "@common/entity/host.entity";
 import { User } from "@common/entity/user.entity";
 import { format } from "date-fns";
@@ -62,7 +61,7 @@ export function getHostMenu(hosts: Host[]) {
     hosts
       .sort((a, b) => (a.title < b.title ? -1 : 1))
       .map((h) => ({
-        text: `${h.title} [${h.userId ? "❌" : "✅"}]`,
+        text: `${h.title} [${h?.user?.id ? "❌" : "✅"}]`,
         callback_data: ActionPrefix.HOST + h.title,
       }))
       .concat([...refresh]),
@@ -72,10 +71,7 @@ export function getHostMenu(hosts: Host[]) {
 
 @Scene(SceneEnum.INFO_SCENE)
 export class InfoScene {
-  constructor(
-    private hostService: HostService,
-    private usersService: UsersService
-  ) {}
+  constructor(private hostService: HostService) {}
 
   @SceneEnter()
   async onSceneEnter(@Ctx() ctx: Context) {
@@ -101,7 +97,7 @@ export class InfoScene {
     ctx.session.currentHost = host;
     await ctx.replyWithHTML(
       this.renderCartHost(host),
-      eventMenuHost(!!host.userId)
+      eventMenuHost(!!host?.user?.id)
     );
   }
 
