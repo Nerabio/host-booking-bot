@@ -41,7 +41,7 @@ export function eventMenuHost(isBusy: boolean) {
         text: `${isBusy ? "🔑 Освободить" : "🔒 Занять"}`,
         callback_data: isBusy ? ActionHost.DISMISS : ActionHost.HOLD,
       },
-      { text: "-> Следить", callback_data: ActionHost.NOTICE },
+      { text: "🔔 Следить", callback_data: ActionHost.NOTICE },
       { text: "📝 Редактировать", callback_data: ActionHost.EDIT },
       { text: "↩️ Назад", callback_data: "allHost" },
     ],

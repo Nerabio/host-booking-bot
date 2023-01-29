@@ -4,7 +4,7 @@
       "id": "390674782:390674782",
       "data": {
         "__scenes": {
-          "current": "INFO_SCENE_ID",
+          "current": "ADMIN_ID",
           "state": {}
         },
         "count": 123,
@@ -17,19 +17,12 @@
           "isActive": true
         },
         "currentHost": {
-          "id": 1,
-          "title": "dev.kion.ru",
+          "id": 5,
+          "title": "s3.dev.kion.ru",
           "isActive": true,
-          "lastChangedDateTime": "2023-01-29T15:45:21.244Z",
-          "busyDateTime": "2023-01-29T15:45:21.237Z",
-          "user": {
-            "id": 1,
-            "firstName": "Alexandr",
-            "lastName": "D",
-            "telegramName": "Nerey",
-            "telegramId": "390674782",
-            "isActive": true
-          }
+          "lastChangedDateTime": "2023-01-22T22:55:15.753Z",
+          "busyDateTime": null,
+          "user": null
         }
       }
     },
