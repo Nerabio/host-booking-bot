@@ -6,6 +6,9 @@ import { SceneEnum } from "@common/enums/scene.enum";
 import { Host } from "@common/entity/host.entity";
 import { User } from "@common/entity/user.entity";
 import { format } from "date-fns";
+import { NoticeService } from "@common/services/notice.service";
+import { Notice } from "@common/entity/notice.entity";
+import { NotFoundException } from "@nestjs/common";
 
 export enum ActionPrefix {
   HOST = "select_host->",
@@ -17,6 +20,7 @@ export enum ActionHost {
   EDIT = "edit",
   ALL_HOST = "allHost",
   DISMISS = "dismiss",
+  NOTICE = "notice",
 }
 
 export function hostsKeyboard() {
@@ -37,6 +41,7 @@ export function eventMenuHost(isBusy: boolean) {
         text: `${isBusy ? "🔑 Освободить" : "🔒 Занять"}`,
         callback_data: isBusy ? ActionHost.DISMISS : ActionHost.HOLD,
       },
+      { text: "-> Следить", callback_data: ActionHost.NOTICE },
       { text: "📝 Редактировать", callback_data: ActionHost.EDIT },
       { text: "↩️ Назад", callback_data: "allHost" },
     ],
@@ -71,7 +76,10 @@ export function getHostMenu(hosts: Host[]) {
 
 @Scene(SceneEnum.INFO_SCENE)
 export class InfoScene {
-  constructor(private hostService: HostService) {}
+  constructor(
+    private hostService: HostService,
+    private noticeService: NoticeService
+  ) {}
 
   @SceneEnter()
   async onSceneEnter(@Ctx() ctx: Context) {
@@ -117,10 +125,10 @@ export class InfoScene {
   }
 
   isBusy(host: Host): boolean {
-    return !!host.user;
+    return !!host?.user;
   }
 
-  isOwner(host: Host, telegramId: number): boolean {
+  isOwner(host: Host, telegramId: string): boolean {
     return host?.user?.telegramId === telegramId;
   }
 
@@ -130,6 +138,9 @@ export class InfoScene {
     const currentUser: User = ctx.session.currentUser;
     const host = await this.hostService.findOne(currentHost.id);
 
+    if (!host) {
+      throw new NotFoundException();
+    }
     if (this.isBusy(host)) {
       await this.deleteMessage(ctx);
       await ctx.replyWithHTML(
@@ -164,8 +175,36 @@ export class InfoScene {
     await this.hostService.save(host);
     await ctx.editMessageText(`Хост ${host.title}  свободен!`);
     await this.onAllHost(ctx);
+
+    console.log(host?.notices);
+    await this.sendNotice(ctx, host);
   }
 
+  @Action(ActionHost.NOTICE)
+  async saveNoticeHost(@Ctx() ctx: Context) {
+    const currentHost: Host = ctx.session.currentHost;
+    const host = await this.hostService.findOne(currentHost.id);
+    const notice = new Notice();
+    notice.host = host;
+    notice.message = `Хост ${host.title} освободился, успейте его занять`;
+    notice.chatId = ctx.from.id.toString();
+
+    await this.noticeService.save(notice);
+    await this.onAllHost(ctx);
+  }
+
+  async sendNotice(ctx: Context, host: Host): Promise<void> {
+    host.notices.forEach((notice) => {
+      setTimeout(() => {
+        ctx.telegram.sendMessage(
+          notice.chatId,
+          notice.message,
+          simpleBtnMenu("Выбрать этот хост'", ActionPrefix.HOST + host.title)
+        );
+        this.noticeService.markCompleted(notice);
+      }, 5000);
+    });
+  }
   async deleteMessage(ctx: Context): Promise<void> {
     try {
       await ctx.deleteMessage();

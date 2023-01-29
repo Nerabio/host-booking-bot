@@ -16,7 +16,7 @@ export class User {
   telegramName: string;
 
   @Column()
-  telegramId: number;
+  telegramId: string;
 
   @Column({ default: true })
   isActive: boolean;

@@ -18,7 +18,7 @@ export class UsersService {
     return this.usersRepository.findOneBy({ id });
   }
 
-  findOneByTelegramId(telegramId: number): Promise<User> {
+  findOneByTelegramId(telegramId: string): Promise<User> {
     return this.usersRepository.findOneBy({ telegramId });
   }
 

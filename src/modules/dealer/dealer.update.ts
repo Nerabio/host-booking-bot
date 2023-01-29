@@ -46,13 +46,15 @@ export class DealerUpdate {
   constructor(private usersService: UsersService) {}
   @Start()
   async onStart(@Ctx() ctx: Context) {
-    let user = await this.usersService.findOneByTelegramId(ctx.from.id);
+    let user = await this.usersService.findOneByTelegramId(
+      ctx.from.id.toString()
+    );
     if (!user) {
       user = new User();
-      user.telegramId = ctx.from.id;
-      user.firstName = ctx.from.first_name;
-      user.lastName = ctx.from.last_name;
-      user.telegramName = ctx.from.username;
+      user.telegramId = ctx.from.id.toString();
+      user.firstName = ctx.from?.first_name;
+      user.lastName = ctx.from?.last_name;
+      user.telegramName = ctx.from?.username ?? user?.firstName;
       await this.usersService.save(user);
     }
     ctx.session.currentUser = user;

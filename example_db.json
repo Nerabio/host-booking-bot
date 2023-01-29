@@ -13,23 +13,48 @@
           "firstName": "Alexandr",
           "lastName": "D",
           "telegramName": "Nerey",
-          "telegramId": 390674782,
+          "telegramId": "390674782",
           "isActive": true
         },
         "currentHost": {
           "id": 1,
           "title": "dev.kion.ru",
           "isActive": true,
-          "lastChangedDateTime": "2023-01-21T12:09:31.260Z",
-          "busyDateTime": "2023-01-21T12:09:31.256Z",
+          "lastChangedDateTime": "2023-01-29T15:45:21.244Z",
+          "busyDateTime": "2023-01-29T15:45:21.237Z",
           "user": {
             "id": 1,
             "firstName": "Alexandr",
             "lastName": "D",
             "telegramName": "Nerey",
-            "telegramId": 390674782,
+            "telegramId": "390674782",
             "isActive": true
           }
+        }
+      }
+    },
+    {
+      "id": "5818773942:5818773942",
+      "data": {
+        "__scenes": {
+          "current": "INFO_SCENE_ID",
+          "state": {}
+        },
+        "currentUser": {
+          "id": 4,
+          "firstName": "Mark",
+          "lastName": "Aurelius",
+          "telegramName": "Mark",
+          "telegramId": "5818773942",
+          "isActive": true
+        },
+        "currentHost": {
+          "id": 3,
+          "title": "s1.dev.kion.ru",
+          "isActive": true,
+          "lastChangedDateTime": "2023-01-22T22:55:15.753Z",
+          "busyDateTime": null,
+          "user": null
         }
       }
     }
