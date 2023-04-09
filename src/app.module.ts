@@ -13,6 +13,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { DataSource } from "typeorm";
 import { dataSourceOptions } from "./typeorm.config";
 
+console.log("token ->" + `${process.env.TOKEN_BOT}`);
 @Module({
   imports: [
     ConfigModule.forRoot({

@@ -4,8 +4,9 @@ import { DataSourceOptions } from "typeorm/data-source/DataSourceOptions";
 export const dataSourceOptions: DataSourceOptions = {
   migrationsTableName: "migrations",
   type: "postgres",
-  host: "localhost",
+  host: "postgres",
   port: 5432,
+
   username: "habrpguser",
   password: "pgpwd4habr",
   database: "postgres",

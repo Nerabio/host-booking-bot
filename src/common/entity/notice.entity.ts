@@ -1,9 +1,7 @@
 import {
   Column,
   Entity,
-  JoinTable,
   ManyToOne,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
@@ -11,6 +9,7 @@ import { Host } from "@common/entity/host.entity";
 
 @Entity()
 export class Notice {
+  // @Index({ unique: true })
   @PrimaryGeneratedColumn()
   id: number;
 
