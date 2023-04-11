@@ -25,7 +25,7 @@ console.log("token ->" + `${process.env.TOKEN_BOT}`);
     TypeOrmModule.forRoot({
       ...dataSourceOptions,
       autoLoadEntities: true,
-      synchronize: true,
+      synchronize: false,
       entities: [
         "/src/common/entity/**/*.entity.ts",
         "/dist/common/entity/**/*.entity.ts",
@@ -34,7 +34,7 @@ console.log("token ->" + `${process.env.TOKEN_BOT}`);
     TelegrafModule.forRootAsync({
       botName: GreeterBotName,
       useFactory: () => ({
-        token: `${process.env.TOKEN_BOT}`,
+        token: "1701418155:AAHQ3NsKORFMCvn94C7psQoo46AtLE6lo2I",
         middlewares: [localSessionMiddleware],
         include: [DealerModule],
       }),

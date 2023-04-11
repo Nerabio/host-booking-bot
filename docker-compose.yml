@@ -2,7 +2,7 @@ version: "3.3"
 services:
   postgres:
     container_name: postgres_container
-    image: postgres:13.3
+    image: postgres:15.2-alpine
     command:
       - "postgres"
       - "-c"
@@ -40,7 +40,7 @@ services:
       POSTGRES_USER: "habrpguser"
       POSTGRES_PASSWORD: "pgpwd4habr"
       PGDATA: "/home/nerey/docker/volumes/postgres"
-    restart: unless-stopped
+    restart: always
     ports:
       - "5432:5432"
     networks:
@@ -48,7 +48,7 @@ services:
 
   pgadmin:
     container_name: pgadmin_container
-    image: dpage/pgadmin4:5.7
+    image: dpage/pgadmin4:latest
     environment:
       PGADMIN_DEFAULT_EMAIL: "habrpguser@habr.com"
       PGADMIN_DEFAULT_PASSWORD: "pgadminpwd4habr"

@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  Index,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -9,7 +10,7 @@ import { Host } from "@common/entity/host.entity";
 
 @Entity()
 export class Notice {
-  // @Index({ unique: true })
+  @Index({ unique: true })
   @PrimaryGeneratedColumn()
   id: number;
 
