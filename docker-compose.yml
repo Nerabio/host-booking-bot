@@ -79,8 +79,19 @@ services:
       - .:/app
       - /app/node_modules
     restart: always
-    depends_on: # ждёт запуска базы
+    depends_on:
       - postgres
+
+
+# MIGRATION
+#  nest_api_migrations:
+#    build: .
+#    command: npm run migration:up
+#    depends_on:
+#      - postgres
+#      - nest_api
+#    networks:
+#      - postgres
 
 networks:
   postgres:

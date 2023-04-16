@@ -2,7 +2,6 @@ import { Command, Ctx, Start, Update, Action } from "nestjs-telegraf";
 import { Context } from "../../interfaces/context.interface";
 import { Update as UT } from "telegraf/typings/core/types/typegram";
 import { Markup } from "telegraf";
-import { Cron, CronExpression } from "@nestjs/schedule";
 import { HostModel } from "@common/models/host.model";
 import { SceneEnum } from "@common/enums/scene.enum";
 import { UsersService } from "@common/services/users.service";
@@ -41,7 +40,7 @@ export function mainNavigation() {
 
 @Update()
 export class DealerUpdate {
-  private gCtx: Context;
+  //private gCtx: Context;
 
   constructor(private usersService: UsersService) {}
   @Start()

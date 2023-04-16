@@ -4,7 +4,7 @@
       "id": "390674782:390674782",
       "data": {
         "__scenes": {
-          "current": "ADMIN_ID",
+          "current": "INFO_SCENE_ID",
           "state": {}
         },
         "count": 123,
@@ -17,10 +17,10 @@
           "isActive": true
         },
         "currentHost": {
-          "id": 5,
-          "title": "s3.dev.kion.ru",
+          "id": 6,
+          "title": "test.kion.ru",
           "isActive": true,
-          "lastChangedDateTime": "2023-01-22T22:55:15.753Z",
+          "lastChangedDateTime": "2023-04-16T16:07:41.290Z",
           "busyDateTime": null,
           "user": null
         }

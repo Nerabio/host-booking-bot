@@ -21,14 +21,15 @@ export enum ActionHost {
   ALL_HOST = "allHost",
   DISMISS = "dismiss",
   NOTICE = "notice",
+  FREE_HOST = "freeHost",
 }
 
 export function hostsKeyboard() {
   return Markup.inlineKeyboard(
     [
-      { text: "Все хосты", callback_data: "allHost" },
-      { text: "Все свободные", callback_data: "freeHost" },
-      { text: "Поиск по названию", callback_data: "search" },
+      { text: "Все хосты", callback_data: ActionHost.ALL_HOST },
+      { text: "Все свободные", callback_data: ActionHost.FREE_HOST },
+      // { text: "Поиск по названию", callback_data: "search" },
     ],
     { columns: 2 }
   );
@@ -43,7 +44,7 @@ export function eventMenuHost(isBusy: boolean) {
       },
       { text: "🔔 Следить", callback_data: ActionHost.NOTICE },
       { text: "📝 Редактировать", callback_data: ActionHost.EDIT },
-      { text: "↩️ Назад", callback_data: "allHost" },
+      { text: "↩️ Назад", callback_data: ActionHost.ALL_HOST },
     ],
     { columns: 2 }
   );
@@ -55,11 +56,11 @@ export function simpleBtnMenu(title: string, actionName: string) {
   });
 }
 
-export function getHostMenu(hosts: Host[]) {
-  const refresh = [
+export function getHostMenu(hosts: Host[], refreshCommand: ActionHost) {
+  const callbackButtons = [
     {
-      text: "♻️ REFRESH",
-      callback_data: "allHost",
+      text: "♻️ Обновить",
+      callback_data: refreshCommand,
     },
   ];
   return Markup.inlineKeyboard(
@@ -69,7 +70,7 @@ export function getHostMenu(hosts: Host[]) {
         text: `${h.title} [${h?.user?.id ? "❌" : "✅"}]`,
         callback_data: ActionPrefix.HOST + h.title,
       }))
-      .concat([...refresh]),
+      .concat([...callbackButtons]),
     { columns: 2 }
   );
 }
@@ -90,7 +91,23 @@ export class InfoScene {
   async onAllHost(ctx: Context) {
     await this.deleteMessage(ctx);
     const allHost = await this.hostService.findAll();
-    await ctx.replyWithHTML("<b>Вот все мои хосты</b>", getHostMenu(allHost));
+    await ctx.replyWithHTML(
+      "<b>Вот все мои хосты</b>",
+      getHostMenu(allHost, ActionHost.ALL_HOST)
+    );
+  }
+
+  @Action(["freeHost"])
+  async onFreeHost(ctx: Context) {
+    await this.deleteMessage(ctx);
+    const allFreeHost = await this.hostService.findAll();
+    await ctx.replyWithHTML(
+      "<b>Вот все мои свободные хосты</b>",
+      getHostMenu(
+        allFreeHost.filter((host) => !host?.user?.id),
+        ActionHost.FREE_HOST
+      )
+    );
   }
 
   @Action(new RegExp(`^${ActionPrefix.HOST}`))

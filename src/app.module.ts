@@ -13,7 +13,6 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { DataSource } from "typeorm";
 import { dataSourceOptions } from "./typeorm.config";
 
-console.log("token ->" + `${process.env.TOKEN_BOT}`);
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -21,7 +20,6 @@ console.log("token ->" + `${process.env.TOKEN_BOT}`);
       load: [configuration],
       cache: true,
     }),
-    //TypeOrmModule.forRoot(typeOrmConfig),
     TypeOrmModule.forRoot({
       ...dataSourceOptions,
       autoLoadEntities: true,
@@ -34,7 +32,7 @@ console.log("token ->" + `${process.env.TOKEN_BOT}`);
     TelegrafModule.forRootAsync({
       botName: GreeterBotName,
       useFactory: () => ({
-        token: "1701418155:AAHQ3NsKORFMCvn94C7psQoo46AtLE6lo2I",
+        token: process.env.TOKEN_BOT,
         middlewares: [localSessionMiddleware],
         include: [DealerModule],
       }),
