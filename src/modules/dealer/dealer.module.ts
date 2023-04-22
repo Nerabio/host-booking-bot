@@ -10,6 +10,7 @@ import { AdminScene } from "./scenes/admin.scene";
 import { Host } from "@common/entity/host.entity";
 import { NoticeService } from "@common/services/notice.service";
 import { Notice } from "@common/entity/notice.entity";
+import { NavigationService } from "@common/services/navigation.service";
 
 @Module({
   imports: [TypeOrmModule.forFeature([User, Host, Notice])],
@@ -21,6 +22,7 @@ import { Notice } from "@common/entity/notice.entity";
     AdminScene,
     UsersService,
     NoticeService,
+    NavigationService,
   ],
 })
 export class DealerModule {}

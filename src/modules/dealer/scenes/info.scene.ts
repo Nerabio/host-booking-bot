@@ -8,7 +8,9 @@ import { User } from "@common/entity/user.entity";
 import { format } from "date-fns";
 import { NoticeService } from "@common/services/notice.service";
 import { Notice } from "@common/entity/notice.entity";
-import { NotFoundException } from "@nestjs/common";
+import { NotFoundException, UseInterceptors } from "@nestjs/common";
+import { NavigationService } from "@common/services/navigation.service";
+import { TestInterceptor } from "@common/interceptors/test.interceptor";
 
 export enum ActionPrefix {
   HOST = "select_host->",
@@ -75,11 +77,13 @@ export function getHostMenu(hosts: Host[], refreshCommand: ActionHost) {
   );
 }
 
+@UseInterceptors(TestInterceptor)
 @Scene(SceneEnum.INFO_SCENE)
 export class InfoScene {
   constructor(
     private hostService: HostService,
-    private noticeService: NoticeService
+    private noticeService: NoticeService,
+    private navigationService: NavigationService
   ) {}
 
   @SceneEnter()
@@ -91,6 +95,11 @@ export class InfoScene {
   async onAllHost(ctx: Context) {
     await this.deleteMessage(ctx);
     const allHost = await this.hostService.findAll();
+    //this.navigationService.setCurrentRoute()
+    const cbQuery = ctx.update.callback_query;
+    const actionName = "data" in cbQuery ? cbQuery.data : null;
+    this.navigationService.setCurrentRoute(actionName);
+    console.log(this.navigationService.getCurrentRout());
     await ctx.replyWithHTML(
       "<b>Вот все мои хосты</b>",
       getHostMenu(allHost, ActionHost.ALL_HOST)
