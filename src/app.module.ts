@@ -11,6 +11,7 @@ import { localSessionMiddleware } from "./middleware/session.middleware";
 import { ScheduleModule } from "@nestjs/schedule";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { DataSource } from "typeorm";
+import { dataSourceOptions } from "./typeorm.config";
 
 @Module({
   imports: [
@@ -19,26 +20,19 @@ import { DataSource } from "typeorm";
       load: [configuration],
       cache: true,
     }),
-    //TypeOrmModule.forRoot(typeOrmConfig),
     TypeOrmModule.forRoot({
-      type: "postgres",
-      host: "localhost",
-      port: 5432,
-      username: "habrpguser",
-      password: "pgpwd4habr",
-      database: "postgres",
-      synchronize: true,
+      ...dataSourceOptions,
       autoLoadEntities: true,
+      synchronize: false,
       entities: [
         "/src/common/entity/**/*.entity.ts",
         "/dist/common/entity/**/*.entity.ts",
       ],
-      migrations: ["/src/migrations/**/*.ts", "/dist/migrations/**/*.js"],
     }),
     TelegrafModule.forRootAsync({
       botName: GreeterBotName,
       useFactory: () => ({
-        token: `${process.env.TOKEN_BOT}`,
+        token: process.env.TOKEN_BOT,
         middlewares: [localSessionMiddleware],
         include: [DealerModule],
       }),
@@ -51,5 +45,7 @@ import { DataSource } from "typeorm";
   providers: [AppService, Logger],
 })
 export class AppModule {
-  constructor(private dataSource: DataSource) {}
+  constructor(private dataSource: DataSource) {
+    dataSource.driver.afterConnect().then(() => console.log("Connection OK!!"));
+  }
 }

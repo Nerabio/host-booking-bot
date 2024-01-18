@@ -8,9 +8,13 @@ import { User } from "@common/entity/user.entity";
 import { UsersService } from "@common/services/users.service";
 import { AdminScene } from "./scenes/admin.scene";
 import { Host } from "@common/entity/host.entity";
+import { NoticeService } from "@common/services/notice.service";
+import { Notice } from "@common/entity/notice.entity";
+import { NavigationService } from "@common/services/navigation.service";
+import { MenuService } from "@common/services/menu.service";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Host])],
+  imports: [TypeOrmModule.forFeature([User, Host, Notice])],
   providers: [
     DealerUpdate,
     RandomNumberScene,
@@ -18,6 +22,9 @@ import { Host } from "@common/entity/host.entity";
     InfoScene,
     AdminScene,
     UsersService,
+    NoticeService,
+    NavigationService,
+    MenuService,
   ],
 })
 export class DealerModule {}

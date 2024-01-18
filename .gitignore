@@ -44,3 +44,6 @@ Thumbs.db
 # environments
 **/*.env
 !config/environments/example.env
+
+# file db session
+example_db.json

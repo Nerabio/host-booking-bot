@@ -2,7 +2,6 @@ import { Command, Ctx, Start, Update, Action } from "nestjs-telegraf";
 import { Context } from "../../interfaces/context.interface";
 import { Update as UT } from "telegraf/typings/core/types/typegram";
 import { Markup } from "telegraf";
-import { Cron, CronExpression } from "@nestjs/schedule";
 import { HostModel } from "@common/models/host.model";
 import { SceneEnum } from "@common/enums/scene.enum";
 import { UsersService } from "@common/services/users.service";
@@ -41,18 +40,20 @@ export function mainNavigation() {
 
 @Update()
 export class DealerUpdate {
-  private gCtx: Context;
+  //private gCtx: Context;
 
   constructor(private usersService: UsersService) {}
   @Start()
   async onStart(@Ctx() ctx: Context) {
-    let user = await this.usersService.findOneByTelegramId(ctx.from.id);
+    let user = await this.usersService.findOneByTelegramId(
+      ctx.from.id.toString()
+    );
     if (!user) {
       user = new User();
-      user.telegramId = ctx.from.id;
-      user.firstName = ctx.from.first_name;
-      user.lastName = ctx.from.last_name;
-      user.telegramName = ctx.from.username;
+      user.telegramId = ctx.from.id.toString();
+      user.firstName = ctx.from?.first_name;
+      user.lastName = ctx.from?.last_name;
+      user.telegramName = ctx.from?.username ?? user?.firstName;
       await this.usersService.save(user);
     }
     ctx.session.currentUser = user;

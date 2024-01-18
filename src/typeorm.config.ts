@@ -1,11 +1,12 @@
 import { DataSource } from "typeorm";
 import { DataSourceOptions } from "typeorm/data-source/DataSourceOptions";
 
-const options: DataSourceOptions = {
+export const dataSourceOptions: DataSourceOptions = {
   migrationsTableName: "migrations",
   type: "postgres",
-  host: "localhost",
+  host: "postgres",
   port: 5432,
+
   username: "habrpguser",
   password: "pgpwd4habr",
   database: "postgres",
@@ -18,4 +19,16 @@ const options: DataSourceOptions = {
   },
   logging: true,
 };
-export const connectionSource = new DataSource(options);
+
+const connectionSource = new DataSource(dataSourceOptions);
+
+connectionSource
+  .initialize()
+  .then(() => {
+    console.log("connection bd initialize");
+  })
+  .catch(() => {
+    console.log("Error connection bd");
+  });
+
+export default connectionSource;

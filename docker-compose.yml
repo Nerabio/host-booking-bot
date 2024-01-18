@@ -2,7 +2,7 @@ version: "3.3"
 services:
   postgres:
     container_name: postgres_container
-    image: postgres:13.3
+    image: postgres:15.2-alpine
     command:
       - "postgres"
       - "-c"
@@ -33,12 +33,14 @@ services:
       - "pg_stat_statements.max=10000"
       - "-c"
       - "pg_stat_statements.track=all"
+      - "-c"
+      - "enable_parallel_hash=off"
     environment:
       POSTGRES_DB: "postgres"
       POSTGRES_USER: "habrpguser"
       POSTGRES_PASSWORD: "pgpwd4habr"
       PGDATA: "/home/nerey/docker/volumes/postgres"
-    restart: unless-stopped
+    restart: always
     ports:
       - "5432:5432"
     networks:
@@ -46,7 +48,7 @@ services:
 
   pgadmin:
     container_name: pgadmin_container
-    image: dpage/pgadmin4:5.7
+    image: dpage/pgadmin4:latest
     environment:
       PGADMIN_DEFAULT_EMAIL: "habrpguser@habr.com"
       PGADMIN_DEFAULT_PASSWORD: "pgadminpwd4habr"
@@ -58,6 +60,38 @@ services:
     restart: unless-stopped
     networks:
       - postgres
+
+
+  # nestjs
+  nest_api:
+    container_name: nest_api
+    image: nest-api:1.0.0
+    build:
+      context: .              # контекст сборки, для нас это корень проекта
+      dockerfile: ./Dockerfile
+    command: npm run start:dev # запуск команды nestjs для разработки
+    env_file: ./src/config/environments/development.env
+    ports:
+      - "3000:3000"
+    networks:
+      - postgres
+    volumes:
+      - .:/app
+      - /app/node_modules
+    restart: always
+    depends_on:
+      - postgres
+
+
+# MIGRATION
+#  nest_api_migrations:
+#    build: .
+#    command: npm run migration:up
+#    depends_on:
+#      - postgres
+#      - nest_api
+#    networks:
+#      - postgres
 
 networks:
   postgres:

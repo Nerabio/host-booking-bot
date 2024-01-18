@@ -1,5 +1,4 @@
 import { Injectable } from "@nestjs/common";
-import { HostModel } from "../models/host.model";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Host } from "@common/entity/host.entity";
@@ -12,19 +11,31 @@ export class HostService {
   ) {}
 
   findAll(): Promise<Host[]> {
-    return this.hostsRepository.find({
-      relations: {
-        user: true,
-      },
-    });
+    return this.hostsRepository
+      .createQueryBuilder("host")
+      .leftJoinAndSelect("host.user", "user")
+      .getMany();
   }
 
   findOne(id: number): Promise<Host> {
-    return this.hostsRepository.findOneBy({ id });
+    return this.hostsRepository
+      .createQueryBuilder("host")
+      .leftJoinAndSelect("host.notices", "notice", "notice.status = :status", {
+        status: "expect",
+      })
+      .leftJoinAndSelect("host.user", "user")
+      .where("host.id = :hostId")
+      .setParameters({ hostId: id })
+      .getOne();
   }
 
   findByName(title: string): Promise<Host> {
-    return this.hostsRepository.findOneBy({ title });
+    return this.hostsRepository
+      .createQueryBuilder("host")
+      .leftJoinAndSelect("host.user", "user")
+      .where("host.title = :title")
+      .setParameters({ title: title })
+      .getOne();
   }
 
   async save(host: Host): Promise<void> {

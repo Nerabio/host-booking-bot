@@ -3,10 +3,13 @@ import {
   Entity,
   JoinTable,
   ManyToOne,
+  OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 import { User } from "@common/entity/user.entity";
+import { Notice } from "@common/entity/notice.entity";
 
 @Entity()
 export class Host {
@@ -25,14 +28,13 @@ export class Host {
   @Column({ nullable: true })
   busyDateTime: Date;
 
-  @ManyToOne(() => User, (user) => user.hosts, {
-    eager: true,
-  })
+  @ManyToOne(() => User, (user) => user.hosts)
   @JoinTable()
   user: User;
 
-  @Column({ nullable: true })
-  userId: number;
+  @OneToMany(() => Notice, (notice) => notice.host)
+  @JoinTable()
+  notices: Notice[];
 
   public dismiss(): void {
     this.user = null;
