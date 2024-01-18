@@ -17,10 +17,43 @@
           "isActive": true
         },
         "currentHost": {
-          "id": 7,
-          "title": "hisense.kion.ru",
+          "id": 2,
+          "title": "prod.kion.ru",
           "isActive": true,
-          "lastChangedDateTime": "2023-01-09T04:48:20.920Z",
+          "lastChangedDateTime": "2023-01-11T11:11:14.552Z",
+          "busyDateTime": "2023-01-11T11:11:14.543Z",
+          "userId": 3,
+          "user": {
+            "id": 3,
+            "firstName": "Irina",
+            "lastName": "Zakharova",
+            "telegramName": "IrinaNZ",
+            "telegramId": 500301711,
+            "isActive": true
+          }
+        }
+      }
+    },
+    {
+      "id": "500301711:500301711",
+      "data": {
+        "__scenes": {
+          "current": "INFO_SCENE_ID",
+          "state": {}
+        },
+        "currentUser": {
+          "telegramId": 500301711,
+          "firstName": "Irina",
+          "lastName": "Zakharova",
+          "telegramName": "IrinaNZ",
+          "id": 3,
+          "isActive": true
+        },
+        "currentHost": {
+          "id": 2,
+          "title": "prod.kion.ru",
+          "isActive": true,
+          "lastChangedDateTime": "2023-01-10T12:50:52.133Z",
           "busyDateTime": null,
           "userId": null,
           "user": null
