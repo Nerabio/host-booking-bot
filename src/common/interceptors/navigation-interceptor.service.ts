@@ -10,7 +10,7 @@ import { Context as TelegrafContext } from "telegraf";
 import { NavigationService } from "@common/services/navigation.service";
 
 @Injectable()
-export class TestInterceptor implements NestInterceptor {
+export class NavigationInterceptor implements NestInterceptor {
   constructor(private navigationService: NavigationService) {}
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     console.log("TestInterceptor...");
@@ -18,7 +18,8 @@ export class TestInterceptor implements NestInterceptor {
     if (args.length > 0) {
       const telegrafContext: TelegrafContext = args[0];
       const actionName = telegrafContext["match"][0];
-      this.navigationService.setCurrentRoute(actionName);
+      this.navigationService.addActionToChain(actionName);
+      console.log(this.navigationService.getAllRoute());
     }
 
     return next.handle();

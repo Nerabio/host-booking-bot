@@ -17,10 +17,10 @@
           "isActive": true
         },
         "currentHost": {
-          "id": 6,
-          "title": "test.kion.ru",
+          "id": 1,
+          "title": "dev.kion.ru",
           "isActive": true,
-          "lastChangedDateTime": "2023-04-16T16:07:41.290Z",
+          "lastChangedDateTime": "2024-01-16T23:11:16.214Z",
           "busyDateTime": null,
           "user": null
         }
@@ -34,18 +34,18 @@
           "state": {}
         },
         "currentUser": {
-          "id": 4,
+          "telegramId": "5818773942",
           "firstName": "Mark",
           "lastName": "Aurelius",
           "telegramName": "Mark",
-          "telegramId": "5818773942",
+          "id": 3,
           "isActive": true
         },
         "currentHost": {
-          "id": 3,
-          "title": "s1.dev.kion.ru",
+          "id": 7,
+          "title": "hisense.kion.ru",
           "isActive": true,
-          "lastChangedDateTime": "2023-01-22T22:55:15.753Z",
+          "lastChangedDateTime": "2023-04-16T18:07:47.860Z",
           "busyDateTime": null,
           "user": null
         }

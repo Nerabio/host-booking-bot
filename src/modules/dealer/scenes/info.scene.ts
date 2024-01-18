@@ -10,7 +10,8 @@ import { NoticeService } from "@common/services/notice.service";
 import { Notice } from "@common/entity/notice.entity";
 import { NotFoundException, UseInterceptors } from "@nestjs/common";
 import { NavigationService } from "@common/services/navigation.service";
-import { TestInterceptor } from "@common/interceptors/test.interceptor";
+import { NavigationInterceptor } from "@common/interceptors/navigation-interceptor.service";
+import { MenuService } from "@common/services/menu.service";
 
 export enum ActionPrefix {
   HOST = "select_host->",
@@ -24,6 +25,7 @@ export enum ActionHost {
   DISMISS = "dismiss",
   NOTICE = "notice",
   FREE_HOST = "freeHost",
+  MAIN = "main",
 }
 
 export function hostsKeyboard() {
@@ -77,17 +79,19 @@ export function getHostMenu(hosts: Host[], refreshCommand: ActionHost) {
   );
 }
 
-@UseInterceptors(TestInterceptor)
+@UseInterceptors(NavigationInterceptor)
 @Scene(SceneEnum.INFO_SCENE)
 export class InfoScene {
   constructor(
     private hostService: HostService,
     private noticeService: NoticeService,
-    private navigationService: NavigationService
+    private menuService: MenuService
   ) {}
 
   @SceneEnter()
+  @Action(["main"])
   async onSceneEnter(@Ctx() ctx: Context) {
+    await this.deleteMessage(ctx);
     await ctx.replyWithHTML("Я могу помочь с управлением", hostsKeyboard());
   }
 
@@ -95,14 +99,9 @@ export class InfoScene {
   async onAllHost(ctx: Context) {
     await this.deleteMessage(ctx);
     const allHost = await this.hostService.findAll();
-    //this.navigationService.setCurrentRoute()
-    const cbQuery = ctx.update.callback_query;
-    const actionName = "data" in cbQuery ? cbQuery.data : null;
-    this.navigationService.setCurrentRoute(actionName);
-    console.log(this.navigationService.getCurrentRout());
     await ctx.replyWithHTML(
       "<b>Вот все мои хосты</b>",
-      getHostMenu(allHost, ActionHost.ALL_HOST)
+      this.menuService.getHostMenu(allHost)
     );
   }
 
@@ -112,9 +111,8 @@ export class InfoScene {
     const allFreeHost = await this.hostService.findAll();
     await ctx.replyWithHTML(
       "<b>Вот все мои свободные хосты</b>",
-      getHostMenu(
-        allFreeHost.filter((host) => !host?.user?.id),
-        ActionHost.FREE_HOST
+      this.menuService.getHostMenu(
+        allFreeHost.filter((host) => !host?.user?.id)
       )
     );
   }
@@ -136,9 +134,9 @@ export class InfoScene {
   }
 
   renderCartHost(host: Host): string {
-    const rows: string[] = [`<b>${host.title}</b>`];
+    const rows: string[] = [`<b>${host?.title}</b>`];
 
-    if (host.user) {
+    if (host?.user) {
       rows.push(`<b>👨‍🦰 Пользователем:</b> ${host?.user?.telegramName}`);
       rows.push(
         `<b>⌛ Время:</b> ${format(

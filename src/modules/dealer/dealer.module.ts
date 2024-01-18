@@ -11,6 +11,7 @@ import { Host } from "@common/entity/host.entity";
 import { NoticeService } from "@common/services/notice.service";
 import { Notice } from "@common/entity/notice.entity";
 import { NavigationService } from "@common/services/navigation.service";
+import { MenuService } from "@common/services/menu.service";
 
 @Module({
   imports: [TypeOrmModule.forFeature([User, Host, Notice])],
@@ -23,6 +24,7 @@ import { NavigationService } from "@common/services/navigation.service";
     UsersService,
     NoticeService,
     NavigationService,
+    MenuService,
   ],
 })
 export class DealerModule {}
